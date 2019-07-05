@@ -24,7 +24,6 @@ class StoreLoginView(TemplateView):
             return self.render_to_response(context)
         guest = guests.first()
         user = authenticate(request, username=guest.username, password=request.POST['password'])
-        print(user)
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse('index'))
