@@ -3,8 +3,8 @@ from django.db import models
 
 class Section(models.Model):
     title = models.CharField(max_length=100, verbose_name='Раздел')
-    parent = models.ForeignKey('self', default=None, verbose_name='Родительский раздел', on_delete=models.CASCADE,
-                               limit_choices_to={'parent': None})
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE,
+                               verbose_name='Родительский раздел')
 
     def __str__(self):
         return self.title
