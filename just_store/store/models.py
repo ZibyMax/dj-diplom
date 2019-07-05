@@ -18,7 +18,7 @@ class Product(models.Model):
     title = models.CharField(max_length=100, verbose_name='Наименование')
     picture = models.CharField(max_length=100, verbose_name='Изображение')
     description = models.CharField(max_length=200, verbose_name='Описание')
-    section = models.ForeignKey(Section, verbose_name='Раздел', on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, verbose_name='Раздел', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
