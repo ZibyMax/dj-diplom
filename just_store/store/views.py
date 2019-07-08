@@ -5,13 +5,25 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 
+from .models import Section
+
 
 class IndexView(TemplateView):
     template_name = 'index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sections'] = Section.objects.all()
+        return context
+
 
 class StoreLoginView(TemplateView):
     template_name = 'login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sections'] = Section.objects.all()
+        return context
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -34,3 +46,7 @@ class StoreLoginView(TemplateView):
 class StoreLogoutView(LogoutView):
     template_name = 'index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sections'] = Section.objects.all()
+        return context
