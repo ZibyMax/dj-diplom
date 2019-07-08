@@ -11,6 +11,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+        ordering = ['order']
 
 
 class Section(models.Model):
@@ -24,6 +25,7 @@ class Section(models.Model):
     class Meta:
         verbose_name = 'Раздел'
         verbose_name_plural = 'Разделы'
+        ordering = ['order']
 
 
 class Product(models.Model):
@@ -39,4 +41,5 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
+        ordering = ['order']
 
