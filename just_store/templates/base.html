@@ -33,25 +33,25 @@
         <a class="nav-link" href="{% url 'index' %}">Главная</a>
       </li>
 
-      {% for main_section in sections %}
-        {% if not main_section.parent %}
-          {% if main_section|is_child_exist:sections %}
+      {% for category in categories %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
-                 aria-expanded="false">{{ main_section }}</a>
+                 aria-expanded="false">{{ category }}</a>
               <div class="dropdown-menu" aria-labelledby="dropdown01">
                 {% for section in sections %}
-                    {% if section.parent == main_section %}
+                    {% if section.category == category %}
                         <a class="dropdown-item" href="{% url 'section' section.pk  %}">{{ section }}</a>
                     {% endif %}
                 {% endfor %}
               </div>
             </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'section' main_section.pk  %}">{{ main_section }}</a>
-            </li>
-          {% endif %}
+      {% endfor %}
+
+      {% for section in sections %}
+        {% if section.category is None %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'section' section.pk  %}">{{ section }}</a>
+          </li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -73,20 +73,6 @@
 <hr>
 <footer class="container">
   <p>© Просто магазин 2018</p>
-
-  <ul>
-  {% for main_section in sections %}
-    {% if not main_section.parent %}
-    <li>{{ main_section }} ({{ main_section|is_child_exist:sections }})</li>
-      {% for section in sections %}
-        {% if section.parent == main_section %}
-          {{ section }} ({{ section|is_child_exist:sections }})<br>
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
-  </ul>
-
 </footer>
 {% endblock %}
 

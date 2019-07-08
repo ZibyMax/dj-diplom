@@ -7,9 +7,11 @@
 <main role="main">
 
   <div class="container">
-    <!-- Example row of columns -->
-
-    <h1>Смартфоны</h1>
+    {% if current_section.category %}
+    <h1>{{ current_section.category }} | {{ current_section }}</h1>
+    {% else %}
+    <h1>{{ current_section }}</h1>
+    {% endif %}
 
     <div class="row">
 

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
 
-from .models import Section
+from .models import Category, Section, Product
 
 
 class IndexView(TemplateView):
@@ -13,17 +13,13 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
         context['sections'] = Section.objects.all()
         return context
 
 
 class StoreLoginView(TemplateView):
     template_name = 'login.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['sections'] = Section.objects.all()
-        return context
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -46,20 +42,16 @@ class StoreLoginView(TemplateView):
 class StoreLogoutView(LogoutView):
     template_name = 'index.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['sections'] = Section.objects.all()
-        return context
-
 
 class SectionView(ListView):
     template_name = 'section.html'
 
     def get_queryset(self):
-        return
+        return Product.objects.filter(section=self.kwargs['section_id'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
         context['sections'] = Section.objects.all()
         context['current_section'] = Section.objects.get(pk=self.kwargs['section_id'])
         return context
