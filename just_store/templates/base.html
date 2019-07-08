@@ -37,7 +37,7 @@
         {% if not main_section.parent %}
           {% if main_section|is_child_exist:sections %}
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="{% url 'section' main_section.pk  %}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
                  aria-expanded="false">{{ main_section }}</a>
               <div class="dropdown-menu" aria-labelledby="dropdown01">
                 {% for section in sections %}

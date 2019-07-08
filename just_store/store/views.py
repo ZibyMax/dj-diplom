@@ -55,7 +55,11 @@ class StoreLogoutView(LogoutView):
 class SectionView(ListView):
     template_name = 'section.html'
 
+    def get_queryset(self):
+        return
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['sections'] = Section.objects.all()
+        context['current_section'] = Section.objects.get(pk=self.kwargs['section_id'])
         return context
