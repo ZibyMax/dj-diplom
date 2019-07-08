@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from .models import Section
 
@@ -45,6 +45,15 @@ class StoreLoginView(TemplateView):
 
 class StoreLogoutView(LogoutView):
     template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sections'] = Section.objects.all()
+        return context
+
+
+class SectionView(ListView):
+    template_name = 'section.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

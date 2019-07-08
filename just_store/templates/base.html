@@ -36,25 +36,24 @@
       {% for main_section in sections %}
         {% if not main_section.parent %}
           {% if main_section|is_child_exist:sections %}
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dropdown01"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ main_section }}</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown01">
-          {% for section in sections %}
-            {% if section.parent == main_section %}
-          <a class="dropdown-item" href="./smartphones.html">{{ section }}</a>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="{% url 'section' main_section.pk  %}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+                 aria-expanded="false">{{ main_section }}</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown01">
+                {% for section in sections %}
+                    {% if section.parent == main_section %}
+                        <a class="dropdown-item" href="{% url 'section' section.pk  %}">{{ section }}</a>
+                    {% endif %}
+                {% endfor %}
+              </div>
+            </li>
           {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="./empty_section.html">{{ main_section }}</a>
-      </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'section' main_section.pk  %}">{{ main_section }}</a>
+            </li>
           {% endif %}
         {% endif %}
       {% endfor %}
-
     </ul>
     <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="./cart.html">Корзина</a>
 
@@ -63,6 +62,7 @@
     {% else %}
     <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'login' %}">Войти</a>
     {% endif %}
+
   </div>
 </nav>
 {% endblock %}
