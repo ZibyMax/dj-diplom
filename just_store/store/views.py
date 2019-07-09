@@ -1,3 +1,5 @@
+from itertools import count
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView
@@ -55,3 +57,6 @@ class SectionView(ListView):
         context['sections'] = Section.objects.all()
         context['current_section'] = Section.objects.get(pk=self.kwargs['section_id'])
         return context
+
+class ProductView(TemplateView):
+    template_name = 'product.html'
