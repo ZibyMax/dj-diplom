@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 
-from .models import Category, Section, Product
+from .models import Category, Section, Product, Article
 
 
 class IndexView(TemplateView):
@@ -17,6 +17,7 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['sections'] = Section.objects.all()
+        context['articles'] = Article.objects.all().prefetch_related('products')
         return context
 
 
