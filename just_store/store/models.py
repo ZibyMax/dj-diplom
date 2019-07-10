@@ -43,3 +43,17 @@ class Product(models.Model):
         verbose_name_plural = 'Товары'
         ordering = ['order']
 
+
+class Article(models.Model):
+    title = models.CharField(max_length=100, verbose_name='Заголовок')
+    content = models.TextField(verbose_name='Текст статьи')
+    products = models.ManyToManyField(Product, verbose_name='Связанные товары')
+    order = models.IntegerField(default=0, verbose_name='Порядок')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
+        ordering = ['order']
