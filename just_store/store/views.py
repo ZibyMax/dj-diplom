@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 
 from .models import Category, Section, Product
 
@@ -49,14 +49,22 @@ class SectionView(ListView):
     template_name = 'section.html'
 
     def get_queryset(self):
-        return Product.objects.filter(section=self.kwargs['section_id'])
+        return Product.objects.filter(section=self.kwargs['pk'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['sections'] = Section.objects.all()
-        context['current_section'] = Section.objects.get(pk=self.kwargs['section_id'])
+        context['current_section'] = Section.objects.get(pk=self.kwargs['pk'])
         return context
 
-class ProductView(TemplateView):
+
+class ProductView(DetailView):
     template_name = 'product.html'
+    model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        context['sections'] = Section.objects.all()
+        return context
