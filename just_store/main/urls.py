@@ -16,13 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from store.views import IndexView, StoreLoginView, StoreLogoutView, SectionView, ProductView
+from store.views import IndexView, StoreLoginView, StoreLogoutView, SectionView, ProductView, CartView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='index'),
-    path('login', StoreLoginView.as_view(), name='login'),
-    path('logout', StoreLogoutView.as_view(), name='logout'),
+    path('login/', StoreLoginView.as_view(), name='login'),
+    path('logout/', StoreLogoutView.as_view(), name='logout'),
     path('section/<int:pk>/', SectionView.as_view(), name='section'),
-    path('product/<int:pk>/', ProductView.as_view(), name='product')
+    path('product/<int:pk>/', ProductView.as_view(), name='product'),
+    path('card/', CartView.as_view(), name='cart'),
 ]

@@ -54,7 +54,7 @@
         {% endif %}
       {% endfor %}
     </ul>
-    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="./cart.html">Корзина</a>
+    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'cart' %}">Корзина</a>
 
     {% if user.is_authenticated %}
     <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'logout' %}">Выйти</a>
