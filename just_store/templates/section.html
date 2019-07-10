@@ -13,103 +13,28 @@
         <h1>{{ current_section }}</h1>
     {% endif %}
 
-    ---- {{ product_list|length|rem_of_div:3 }} ----
-
     {% for product in product_list %}
-        {{ forloop.counter0 }}
-        {% if forloop.counter0 == 5 %}
-            5555
-        {% endif %}
-    {% endfor %}
-
-
-    {% for product in product_list %}
-
         {% if forloop.counter0|rem_of_div:3 == 0 %}
             <div class="row">
         {% endif %}
 
               <div class="col-md-4">
-                <h2>{{ product.title }}</h2>
-                <a href="{% url 'product' product.pk %}"><img src="{% static 'img/' product.picture %}" width="180"></a>
-                <form>
-                  <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
-                </form>
+                  <h3>{{ product.title }}</h3>
+                  <a href="{% url 'product' product.pk %}">
+                    <img src="{% static 'img/' %}{{ product.picture }}" width="180">
+                  </a>
+                  <form>
+                    <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
+                  </form>
               </div>
 
         {% if forloop.counter0|rem_of_div:3 == 2 %}
             </div>
         {% endif %}
     {% endfor %}
-
-    {% comment %}
-      <div class="col-md-4">
-        <h2>Nexus 5x</h2>
-
-        <a href="./phone.html">
-
-          <img src="./static/nexus5x.webp" width="180">
-
-        </a>
-
-        <form>
-          <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
-        </form>
-      </div>
-
-      <div class="col-md-4">
-        <h2>iPhone 7</h2>
-
-        <a href="./phone.html">
-
-          <img src="./static/iphone7.webp" width="180">
-
-        </a>
-
-        <form>
-          <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
-        </form>
-      </div>
-
-
-      <div class="col-md-4">
-        <h2>Pixel 2</h2>
-
-        <a href="./phone.html">
-
-          <img src="./static/pixel2.webp" width="180">
-
-        </a>
-
-        <form>
-          <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
-        </form>
-      </div>
-
+    {% if not product_list|length|rem_of_div:3 == 1 %}
+        </div>
+    {% endif %}
     </div>
-
-    <div class="row">
-
-
-      <div class="col-md-4">
-        <h2>Samsung S8</h2>
-
-        <a href="./phone.html">
-
-          <img src="./static/samsungs8.webp" width="180">
-
-        </a>
-
-        <form>
-          <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
-        </form>
-      </div>
-
-
-    </div>
-
-  </div>
-
-  {% endcomment %}
 </main>
 {% endblock %}
