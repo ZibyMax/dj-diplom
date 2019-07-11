@@ -60,6 +60,25 @@ class Article(models.Model):
         ordering = ['order']
 
 
-class Order(models.Model):
-    user = models.ForeignKey(User, verbose_name='Заказчик')
+class OrderLine(models.Model):
+    product = models.ForeignKey(Product, verbose_name='Наименование товара', on_delete=models.CASCADE)
+    quantity = models.IntegerField(verbose_name='Количество товара')
 
+    def __str__(self):
+        return f'{self.product.title} - {self.quantity}pcs.'
+
+    class Meta:
+        verbose_name = 'Строка заказа'
+        verbose_name_plural = 'Строки заказа'
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, verbose_name='Заказчик', on_delete=models.CASCADE)
+    products = models.ManyToManyField(OrderLine, verbose_name='Строки заказа')
+
+    def __str__(self):
+        return f'Заказ №{self.pk} - {self.user.name}'
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
