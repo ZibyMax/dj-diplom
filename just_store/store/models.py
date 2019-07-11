@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -57,3 +58,8 @@ class Article(models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
         ordering = ['order']
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, verbose_name='Заказчик')
+

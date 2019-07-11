@@ -118,7 +118,15 @@ class CartView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['sections'] = Section.objects.all()
+        context['products'] = Product.objects.all()
         if 'just_store_cart' in self.request.session:
             context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
+            context['cart'] = {}
+            for product_id, quantity in self.request.session['just_store_cart'].items():
+                product = Product.objects.get(id=product_id)
+                context['cart'][product] = quantity
         return context
 
+    def post(self, request, *args, **kwargs):
+
+        return super().get(self, request, *args, **kwargs)
