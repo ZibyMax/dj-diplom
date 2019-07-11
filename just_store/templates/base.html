@@ -54,7 +54,11 @@
         {% endif %}
       {% endfor %}
     </ul>
-    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'cart' %}">Корзина</a>
+    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'cart' %}">Корзина
+      {% if items_in_cart %}
+      <span class="badge badge-success badge-pill">{{ items_in_cart }}</span>
+      {% endif %}
+    </a>
 
     {% if user.is_authenticated %}
     <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'logout' %}">Выйти</a>
