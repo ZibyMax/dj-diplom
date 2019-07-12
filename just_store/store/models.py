@@ -77,7 +77,7 @@ class Order(models.Model):
     products = models.ManyToManyField(OrderLine, verbose_name='Строки заказа')
 
     def __str__(self):
-        return f'Заказ №{self.pk} - {self.user.name}'
+        return f'Заказ {self.pk} - {self.user.username}'
 
     class Meta:
         verbose_name = 'Заказ'

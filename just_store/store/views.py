@@ -5,13 +5,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 
-from .models import Category, Section, Product, Article, Order
+from .models import Category, Section, Product, Article, Order, OrderLine
 
 
 def add_to_cart(request):
     if 'add_to_cart' in request.POST:
-        # if 'just_store_cart' not in request.session:
-        #     request.session['just_store_cart'] = {}
         request.session.setdefault('just_store_cart', {})
         product_id = request.POST['add_to_cart']
         if product_id in request.session['just_store_cart']:
@@ -130,6 +128,16 @@ class CartView(TemplateView):
     def post(self, request, *args, **kwargs):
         request.session.setdefault('new_order', False)
         request.session['new_order'] = True
+        order = Order(user=request.user)
+        order.save()
+        products = []
+        for product_id, quantity in self.request.session['just_store_cart'].items():
+            product = Product.objects.get(id=product_id)
+            order_line = OrderLine(product=product, quantity=quantity)
+            order_line.save()
+            products.append(order_line)
+        order.products.set(products)
+        order.save()
         return HttpResponseRedirect(reverse('order'))
 
 
@@ -147,5 +155,6 @@ class OrderView(ListView):
         if self.request.session['new_order']:
             context['is_new_order'] = True
             self.request.session['new_order'] = False
+        context['orders'] = Order.objects.all().prefetch_related('products')
         return context
 

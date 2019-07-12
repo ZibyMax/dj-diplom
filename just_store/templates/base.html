@@ -54,6 +54,7 @@
         {% endif %}
       {% endfor %}
     </ul>
+
     <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'cart' %}">Корзина
       {% if items_in_cart %}
       <span class="badge badge-success badge-pill">{{ items_in_cart }}</span>
@@ -61,6 +62,7 @@
     </a>
 
     {% if user.is_authenticated %}
+    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'order' %}">Мои заказы</a>
     <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'logout' %}">Выйти</a>
     {% else %}
     <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'login' %}">Войти</a>
