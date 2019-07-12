@@ -151,10 +151,11 @@ class OrderView(ListView):
         context['sections'] = Section.objects.all()
         if 'just_store_cart' in self.request.session:
             context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
-        self.request.session.setdefault('new_order', False)
-        if self.request.session['new_order']:
-            context['is_new_order'] = True
-            self.request.session['new_order'] = False
-        context['orders'] = Order.objects.all().prefetch_related('products')
+        if self.request.user.is_authenticated:
+            self.request.session.setdefault('new_order', False)
+            if self.request.session['new_order']:
+                context['is_new_order'] = True
+                self.request.session['new_order'] = False
+            context['orders'] = Order.objects.filter(user=self.request.user).prefetch_related('products').order_by("-pk")
         return context
 
