@@ -17,7 +17,14 @@ def add_to_cart(request):
         else:
             request.session['just_store_cart'][product_id] = 1
         request.session.modified = True
-        print(request.session['just_store_cart'])
+
+
+def add_menu_data(context, session):
+    context['categories'] = Category.objects.all()
+    context['sections'] = Section.objects.all()
+    if 'just_store_cart' in session:
+        context['items_in_cart'] = sum(session['just_store_cart'].values())
+    return context
 
 
 class IndexView(TemplateView):
@@ -25,11 +32,8 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['sections'] = Section.objects.all()
+        context = add_menu_data(context, self.request.session)
         context['articles'] = Article.objects.all().prefetch_related('products')
-        if 'just_store_cart' in self.request.session:
-            context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
         return context
 
     def post(self, request, *args, **kwargs):
@@ -63,11 +67,8 @@ class StoreLogoutView(LogoutView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['sections'] = Section.objects.all()
+        context = add_menu_data(context, self.request.session)
         context['articles'] = Article.objects.all().prefetch_related('products')
-        if 'just_store_cart' in self.request.session:
-            context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
         return context
 
 
@@ -80,11 +81,8 @@ class SectionView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['sections'] = Section.objects.all()
+        context = add_menu_data(context, self.request.session)
         context['current_section'] = Section.objects.get(pk=self.kwargs['pk'])
-        if 'just_store_cart' in self.request.session:
-            context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
         return context
 
     def post(self, request, *args, **kwargs):
@@ -98,10 +96,7 @@ class ProductView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['sections'] = Section.objects.all()
-        if 'just_store_cart' in self.request.session:
-            context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
+        context = add_menu_data(context, self.request.session)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -114,11 +109,9 @@ class CartView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['sections'] = Section.objects.all()
+        context = add_menu_data(context, self.request.session)
         context['products'] = Product.objects.all()
         if 'just_store_cart' in self.request.session:
-            context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
             context['cart'] = {}
             for product_id, quantity in self.request.session['just_store_cart'].items():
                 product = Product.objects.get(id=product_id)
@@ -147,10 +140,7 @@ class OrderView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['sections'] = Section.objects.all()
-        if 'just_store_cart' in self.request.session:
-            context['items_in_cart'] = sum(self.request.session['just_store_cart'].values())
+        context = add_menu_data(context, self.request.session)
         if self.request.user.is_authenticated:
             self.request.session.setdefault('new_order', False)
             if self.request.session['new_order']:
