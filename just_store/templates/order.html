@@ -10,7 +10,7 @@
     {% if user.is_authenticated %}
     {% if is_new_order %}<h2 class="text-success">Ваш новый заказ сформирован</h2>{% endif %}
     {% if orders %}
-    <h2 class="text-muted">Ваши заказы</h2>
+    <h2 class="text-muted">Ваши заказы ({{ order_count }})</h2>
     {% for order in orders %}
     <div class="row">
     <div class="col-lg-6 col-md-9 col-sm-12 order-md-2 mb-4">

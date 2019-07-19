@@ -150,5 +150,6 @@ class OrderView(ListView, MenuMixin):
                 context['is_new_order'] = True
                 self.request.session['new_order'] = False
             context['orders'] = Order.objects.filter(user=self.request.user).prefetch_related('products').order_by("-pk")
+        context['order_count'] = self.request.user.show_order_count
         return context
 

@@ -6,6 +6,10 @@ from django.conf import settings
 class User(AbstractUser):
     registration_date = models.DateField(auto_now_add=True, verbose_name='Дата регистрации')
 
+    @property
+    def show_order_count(self):
+        return len(Order.objects.filter(user=self))
+
 
 class Category(models.Model):
     title = models.CharField(max_length=100, verbose_name='Категория')
