@@ -15,7 +15,7 @@ class SectionAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'picture', 'description', 'section')
+    list_display = ('title', 'section', 'description', 'price')
 
 
 class ArticleAdmin(admin.ModelAdmin):

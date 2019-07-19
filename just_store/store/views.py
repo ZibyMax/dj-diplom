@@ -3,7 +3,6 @@ from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.base import ContextMixin
 
 from .models import Category, Section, Product, Article, Order, OrderLine, User
 
@@ -21,7 +20,8 @@ def add_to_cart(request):
 
 class MenuMixin:
 
-    def add_menu_data(self, context, session):
+    @staticmethod
+    def add_menu_data(context, session):
         context['categories'] = Category.objects.all()
         context['sections'] = Section.objects.all()
         if 'just_store_cart' in session:
