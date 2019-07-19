@@ -25,6 +25,9 @@ manage.py migrate
 3. Загрузите тестовые данные в базу:
 manage.py loaddata db.json
 
+4. Запустите тестовый сервер
+manage.py runserver
+
 Тестовый суперпользователь:
 логин: admin
 пароль: admin
