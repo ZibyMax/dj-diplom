@@ -69,7 +69,6 @@ class StoreLogoutView(LogoutView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = self.add_menu_data(context, self.request.session)
         context['articles'] = Article.objects.all().prefetch_related('products')
         return context
 
