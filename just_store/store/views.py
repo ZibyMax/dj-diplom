@@ -19,30 +19,22 @@ def add_to_cart(request):
         request.session.modified = True
 
 
-def add_menu_data(context, session):
-    context['categories'] = Category.objects.all()
-    context['sections'] = Section.objects.all()
-    if 'just_store_cart' in session:
-        context['items_in_cart'] = sum(session['just_store_cart'].values())
-    return context
+class MenuMixin:
+
+    def add_menu_data(self, context, session):
+        context['categories'] = Category.objects.all()
+        context['sections'] = Section.objects.all()
+        if 'just_store_cart' in session:
+            context['items_in_cart'] = sum(session['just_store_cart'].values())
+        return context
 
 
-# class MenuMixin(object):
-#
-#     def add_menu_data(context, session):
-#         context['categories'] = Category.objects.all()
-#         context['sections'] = Section.objects.all()
-#         if 'just_store_cart' in session:
-#             context['items_in_cart'] = sum(session['just_store_cart'].values())
-#         return context
-
-
-class IndexView(TemplateView):
+class IndexView(TemplateView, MenuMixin):
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = add_menu_data(context, self.request.session)
+        context = self.add_menu_data(context, self.request.session)
         context['articles'] = Article.objects.all().prefetch_related('products')
         return context
 
@@ -77,12 +69,12 @@ class StoreLogoutView(LogoutView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = add_menu_data(context, self.request.session)
+        context = self.add_menu_data(context, self.request.session)
         context['articles'] = Article.objects.all().prefetch_related('products')
         return context
 
 
-class SectionView(ListView):
+class SectionView(ListView, MenuMixin):
     template_name = 'section.html'
     model = Product
 
@@ -91,7 +83,7 @@ class SectionView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = add_menu_data(context, self.request.session)
+        context = self.add_menu_data(context, self.request.session)
         context['current_section'] = Section.objects.get(pk=self.kwargs['pk'])
         return context
 
@@ -100,13 +92,13 @@ class SectionView(ListView):
         return super().get(self, request, *args, **kwargs)
 
 
-class ProductView(DetailView):
+class ProductView(DetailView, MenuMixin):
     template_name = 'product.html'
     model = Product
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = add_menu_data(context, self.request.session)
+        context = self.add_menu_data(context, self.request.session)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -114,12 +106,12 @@ class ProductView(DetailView):
         return super().get(self, request, *args, **kwargs)
 
 
-class CartView(TemplateView):
+class CartView(TemplateView, MenuMixin):
     template_name = 'cart.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = add_menu_data(context, self.request.session)
+        context = self.add_menu_data(context, self.request.session)
         context['products'] = Product.objects.all()
         if 'just_store_cart' in self.request.session:
             context['cart'] = {}
@@ -145,13 +137,13 @@ class CartView(TemplateView):
         return HttpResponseRedirect(reverse('order'))
 
 
-class OrderView(ListView):
+class OrderView(ListView, MenuMixin):
     template_name = 'order.html'
     model = Order
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = add_menu_data(context, self.request.session)
+        context = self.add_menu_data(context, self.request.session)
         if self.request.user.is_authenticated:
             self.request.session.setdefault('new_order', False)
             if self.request.session['new_order']:
