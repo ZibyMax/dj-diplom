@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Category, Section, Product, Article, Order
+from .models import User, Category, Section, Product, Article, Order
+
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['username', 'registration_date']
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -21,6 +25,8 @@ class ArticleAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     pass
 
+
+admin.site.register(User, UserAdmin)
 
 admin.site.register(Category, CategoryAdmin)
 

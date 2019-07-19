@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic.base import ContextMixin
 
-from .models import Category, Section, Product, Article, Order, OrderLine
+from .models import Category, Section, Product, Article, Order, OrderLine, User
 
 
 def add_to_cart(request):
@@ -25,6 +25,16 @@ def add_menu_data(context, session):
     if 'just_store_cart' in session:
         context['items_in_cart'] = sum(session['just_store_cart'].values())
     return context
+
+
+# class MenuMixin(object):
+#
+#     def add_menu_data(context, session):
+#         context['categories'] = Category.objects.all()
+#         context['sections'] = Section.objects.all()
+#         if 'just_store_cart' in session:
+#             context['items_in_cart'] = sum(session['just_store_cart'].values())
+#         return context
 
 
 class IndexView(TemplateView):
@@ -131,6 +141,7 @@ class CartView(TemplateView):
             products.append(order_line)
         order.products.set(products)
         order.save()
+        self.request.session['just_store_cart'].clear()
         return HttpResponseRedirect(reverse('order'))
 
 

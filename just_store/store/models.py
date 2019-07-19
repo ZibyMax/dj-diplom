@@ -1,5 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
+
+
+class User(AbstractUser):
+    registration_date = models.DateField(auto_now_add=True, verbose_name='Дата регистрации')
 
 
 class Category(models.Model):
@@ -35,6 +40,7 @@ class Product(models.Model):
     description = models.CharField(max_length=200, verbose_name='Описание')
     section = models.ForeignKey(Section, verbose_name='Раздел', on_delete=models.CASCADE)
     order = models.IntegerField(default=0, verbose_name='Порядок')
+    price = models.FloatField(default=0, verbose_name='Цена')
 
     def __str__(self):
         return self.title
@@ -73,7 +79,7 @@ class OrderLine(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, verbose_name='Заказчик', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Заказчик', on_delete=models.CASCADE)
     products = models.ManyToManyField(OrderLine, verbose_name='Строки заказа')
 
     def __str__(self):
@@ -82,3 +88,4 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+
