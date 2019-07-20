@@ -7,8 +7,14 @@ class User(AbstractUser):
     registration_date = models.DateField(auto_now_add=True, verbose_name='Дата регистрации')
 
     @property
-    def show_order_count(self):
-        return len(Order.objects.filter(user=self))
+    def show_money_count(self):
+        money_count = 0
+        orders = Order.objects.filter(user=self).prefetch_related('products')
+        for order in orders:
+            products = order.products.all()
+            for order_line in products:
+                money_count += order_line.product.price * order_line.quantity
+        return money_count
 
 
 class Category(models.Model):

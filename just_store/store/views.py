@@ -49,6 +49,9 @@ class StoreLoginView(TemplateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         guests = User.objects.filter(email=request.POST['username'])
+        for u in User.objects.all():
+            print(u.email)
+
         if not guests.exists():
             context['login_error'] = 'Пользователя с указанной почтой и паролем не найдено'
             return self.render_to_response(context)
@@ -149,6 +152,6 @@ class OrderView(ListView, MenuMixin):
                 context['is_new_order'] = True
                 self.request.session['new_order'] = False
             context['orders'] = Order.objects.filter(user=self.request.user).prefetch_related('products').order_by("-pk")
-        context['order_count'] = self.request.user.show_order_count
+        context['show_money_count'] = self.request.user.show_money_count
         return context
 
