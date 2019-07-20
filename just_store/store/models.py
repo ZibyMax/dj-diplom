@@ -9,10 +9,8 @@ class User(AbstractUser):
     @property
     def show_money_count(self):
         money_count = 0
-        orders = Order.objects.filter(user=self).prefetch_related('products')
-        for order in orders:
-            products = order.products.all()
-            for order_line in products:
+        for order in Order.objects.filter(user=self).prefetch_related('products'):
+            for order_line in order.products.all():
                 money_count += order_line.product.price * order_line.quantity
         return money_count
 
