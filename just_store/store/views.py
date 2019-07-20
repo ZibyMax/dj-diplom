@@ -49,9 +49,6 @@ class StoreLoginView(TemplateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         guests = User.objects.filter(email=request.POST['username'])
-        for u in User.objects.all():
-            print(u.email)
-
         if not guests.exists():
             context['login_error'] = 'Пользователя с указанной почтой и паролем не найдено'
             return self.render_to_response(context)
